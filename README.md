@@ -39,7 +39,7 @@ Open `http://localhost:5000`.
 
 ## Training dataset format
 
-Use JSONL with a `text` field. A ready-to-use sample is included at `data/sample_train.jsonl`:
+Use JSONL with a `text` field:
 
 ```json
 {"text": "User: Help me plan my day. Assistant: Sure, let's prioritize tasks..."}
@@ -50,7 +50,7 @@ Then call `/train` with:
 
 ```json
 {
-  "dataset_path": "data/sample_train.jsonl",
+  "dataset_path": "data/train.jsonl",
   "output_dir": "outputs/lora-assistant",
   "model_name": "distilgpt2",
   "num_train_epochs": 1
