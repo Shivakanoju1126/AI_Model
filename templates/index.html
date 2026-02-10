@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LORA Personal Assistant</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+    textarea, input { width: 100%; margin: 0.5rem 0 1rem; padding: 0.6rem; }
+    button { padding: 0.6rem 1rem; cursor: pointer; }
+    pre { background: #f5f5f5; padding: 1rem; white-space: pre-wrap; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>LORA Personal Assistant</h1>
+
+  <section>
+    <h2>Chat</h2>
+    <textarea id="message" rows="4" placeholder="Ask LORA anything..."></textarea>
+    <button onclick="sendMessage()">Send</button>
+    <pre id="chat-output"></pre>
+  </section>
+
+  <section>
+    <h2>Train LoRA Adapter</h2>
+    <div class="row">
+      <div>
+        <label>Dataset Path</label>
+        <input id="dataset_path" placeholder="data/sample_train.jsonl" />
+      </div>
+      <div>
+        <label>Output Directory</label>
+        <input id="output_dir" placeholder="outputs/lora-assistant" />
+      </div>
+    </div>
+    <button onclick="startTraining()">Start Training</button>
+    <pre id="train-output"></pre>
+  </section>
+
+  <script>
+    async function sendMessage() {
+      const message = document.getElementById('message').value;
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+      const body = await response.json();
+      document.getElementById('chat-output').textContent = JSON.stringify(body, null, 2);
+    }
+
+    async function startTraining() {
+      const dataset_path = document.getElementById('dataset_path').value;
+      const output_dir = document.getElementById('output_dir').value;
+      const response = await fetch('/train', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dataset_path, output_dir })
+      });
+      const body = await response.json();
+      document.getElementById('train-output').textContent = JSON.stringify(body, null, 2);
+    }
+  </script>
+</body>
+</html>
